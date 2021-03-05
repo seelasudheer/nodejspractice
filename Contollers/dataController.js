@@ -1,5 +1,6 @@
 
 const Record=require('../Models/Data')
+const User =require('../Models/User')
 
 //get Records
 const getRecord=(req,res,next)=>{
@@ -12,21 +13,37 @@ const getRecord=(req,res,next)=>{
 }
 
 // add Record
-const addRecord=(req,res,next)=>{
+const addRecord=async(req,res,next)=>{
       let record=new Record({
         name:req.body.name,
         age:req.body.age,
         gender:req.body.gender,
         address:req.body.address,
         phonenumber:req.body.phonenumber,
-        email:req.body.email
+        email:req.body.email,
+        userid:req.body.userid
       })
-      record.save()
+      try{
+     let data=await User.find({email:req.body.email})
+        console.log(data,"coooo9999999900000000000");
+        if(data.length==0){
+      await record.save()
       .then(resp=>{
           res.send(resp)
       }).catch(err=>{
-        res.send(err)
+          console.log("fer",err);
+          if(Object.keys(err.keyValue)>0)
+        res.send({message:"Email Already Exist"})
+        else{
+            res.send(err)
+        }
       })
+    }else{
+        res.send({message:"Email Already Exist"})
+    }
+    }catch(err){
+        console.log(err);
+    }
 }
 
 //show one Record 

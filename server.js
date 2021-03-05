@@ -2,7 +2,7 @@ const express=require('express')
 const mongoose=require('mongoose')
 const userRouter=require('./Routes/userRouter')
 const dataRouter=require('./Routes/dataRouter')
-
+const utilRouter= require('./Routes/getInfo')
 
 const app=express()
 mongoose.connect('mongodb://localhost:27017/finaldb',{useNewUrlParser:true,useUnifiedTopology:true})
@@ -18,6 +18,7 @@ db.once('connected',()=>{
 
 app.use(express.json())
 app.use('/record',dataRouter)
+app.use('/api',utilRouter)
 app.use('/',userRouter)
 
 app.listen(3002,()=>{

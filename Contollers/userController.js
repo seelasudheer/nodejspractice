@@ -16,10 +16,13 @@ const signUp=(req,res,next)=>{
              })
              try{
             let data= await user.save()
+            if(data){
              res.json({data:data,status:"created successfully"})
-            
+            }
              }catch(err){
-                 res.send(err)
+                //  console.log(err);
+                 if(err && err.keyValue)
+                 res.send({err,status:"Email Already Exist"})
              }
     })
         
@@ -90,11 +93,26 @@ const deleteUser=async(req,res,next)=>{
     }
 }
 
+const showUser=async(req,res,next)=>{
+    try{
+         let id=req.body.id
+  let data=await UserModel.findById(id)
+         if(data){
+         res.send(data)
+         }else{
+            res.send("No Id")
+         }
+        }catch(err){
+            res.send(err)
+        } 
+}
+
 
 
 module.exports={
     signUp,
     LogIn,
     getUsers,
-    deleteUser
+    deleteUser,
+    showUser
 }
