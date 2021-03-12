@@ -9,9 +9,10 @@ const recordSchema=new Schema({
     address:{type:String,required:true},
     email:{type:String,required:true,unique:true},
     phonenumber:{type:Number,required:true},
+    image:{type:Object},
     userid:{type:Schema.Types.ObjectId,ref:'User'}
 },{timestamps:true})
 
-const Record=mongoose.model('Records',recordSchema)
+const Record=mongoose.model ('Records',recordSchema)
 
 module.exports=Record

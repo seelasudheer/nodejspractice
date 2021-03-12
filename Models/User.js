@@ -7,6 +7,8 @@ const UserSchema=new Schema({
     email:{type:String, unique: true},
     password:{type:String},
     secret:{type:String},
+    role:{type:String},
+    inviteCode:{type:String}
 })
 
 const userSchema=mongoose.model('User',UserSchema)

@@ -8,12 +8,14 @@ const jswtVerify=(req,res,next)=>{
     jwt.verify(authToken,'secretpoppy',(err,result)=>{
         if(err){
             console.log("err",err);
-            res.send(err)
+           return res.send(err)
         }
        req.userData=result
-       console.log(result);
+       console.log("result-------------",result);
        if(result){
        next();
+       } else {
+           return res.send({message:"invalid token"})
        }
     })
 

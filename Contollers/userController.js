@@ -2,8 +2,11 @@ const UserModel=require('../Models/User')
 const bcrypt=require('bcrypt')
 const jwt=require('jsonwebtoken')
 
+const roles=["Admin","Manager","Employee"]
+
 const signUp=(req,res,next)=>{
     // user
+    console.log(req.body,"cool");
     bcrypt.hash(req.body.password,10,async function(err,hashedPass){
              if(err){
                  res.json({error:err})
@@ -13,6 +16,7 @@ const signUp=(req,res,next)=>{
                      email:req.body.email,
                      secret:req.body.password,
                      password:hashedPass,
+                     role:req.body.role
              })
              try{
             let data= await user.save()
@@ -29,6 +33,17 @@ const signUp=(req,res,next)=>{
 }
 
 const LogIn=async(req,res,next)=>{
+    console.log(req.body,"coooooooooooool");
+    // const form = formidable({ multiples: true });
+ 
+    // form.parse(req, (err, fields, files) => {
+    // if(err)
+    // console.log(err);
+    // else{
+    // console.log(fields);
+    //   res.send({ fields }, null, 2);
+    // }
+    // });
     let email=req.body.email
     let password=req.body.password
     try{
@@ -98,6 +113,7 @@ const showUser=async(req,res,next)=>{
          let id=req.body.id
   let data=await UserModel.findById(id)
          if(data){
+             console.log(data);
          res.send(data)
          }else{
             res.send("No Id")
@@ -107,6 +123,9 @@ const showUser=async(req,res,next)=>{
         } 
 }
 
+const getRoles=(req,res,next)=>{
+    res.send(roles)
+}
 
 
 module.exports={
@@ -114,5 +133,7 @@ module.exports={
     LogIn,
     getUsers,
     deleteUser,
-    showUser
+    showUser,
+    getRoles,
+    
 }
