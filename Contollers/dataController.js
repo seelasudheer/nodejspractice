@@ -3,18 +3,25 @@ const User =require('../Models/User')
 const fs=require('fs')
 //get Records
 const getRecord=(req,res,next)=>{
-    Record.find().
-    then(resp=>{
-        console.log(resp);
-        res.send({resp:resp,count:resp.length})
-    }).catch(err=>{
-        console.log(err);
-    })
+    // res.json({})
+    // console.log(res);
+    res.send({result:res.paginatedResult.result,count:res.paginatedResult.result.length})
 }
 
 // add Record
 const addRecord=async(req,res,next)=>{
     let fileType="";
+    try{
+        let data1=await User.findById(req.body.userid)
+ if(!data1){
+     console.log(Record,"duplicate");
+      res.send({message:"please give valid Source Id"})
+    // return res.send({status:data[0].status})
+ }
+
+    }catch(err){
+          console.log(err);
+    }
     console.log("req.body---------------ggggggg",req);
     if(!req.file){
         console.log("No fiLE",req.file);
@@ -135,16 +142,8 @@ res.json(err)
 //getByUserId Record
 const getByUserId=async(req,res,next)=>{
              let userid=req.body.userid
-            // console.log(req);
-            console.log(req,req.body,userid);
-            try{
-                let data=await Record.find({'userid':userid})
-                console.log(data);
-                res.send({data:data,count:data.length})
-            }catch(err){
-                console.log(err);
-                res.send(err)
-            }
+            //  console.log(res);
+            res.send({result:res.paginatedResult && res.paginatedResult.result,count:res.paginatedResult && res.paginatedResult.result.length})
 }
 
 module.exports={

@@ -2,6 +2,7 @@ const nodeMailer=require('nodemailer')
 const fs=require('fs')
 const inviteSchema=require('../Models/InviteList')
 const User=require('../Models/User')
+const Record=require('../Models/Data')
 const data=["Afghanistan", "Albania", "Algeria", "American Samoa", "Angola", "Anguilla", "Antartica", "Antigua and Barbuda", "Argentina",
  "Armenia", "Aruba", "Ashmore and Cartier Island", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", 
  "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil",
@@ -31,6 +32,17 @@ const sendMail=async(req,res,next)=>{
  
     let randomId;
     let status;
+    try{
+        let data1=await User.findById(parentId)
+ if(!data1){
+     console.log(Record,"duplicate");
+      res.send({message:"please give valid Source Id"})
+    // return res.send({status:data[0].status})
+ }
+
+    }catch(err){
+          console.log(err);
+    }
 
     try{
         let data=await inviteSchema.find({'email':req.body.email})
@@ -41,7 +53,7 @@ const sendMail=async(req,res,next)=>{
  }
 
     }catch(err){
-
+          console.log(err);
     }
 
     try{
@@ -51,9 +63,10 @@ const sendMail=async(req,res,next)=>{
         // res.send({data:getData.schema.tree})
         if(getData && getData.inviteCode){
             randomId=getData.inviteCode
-            if(getData && getData.status)
+            if(getData && getData.status){
             status=getData.status
-            
+            // return 
+            }
         }else{
          randomId=makeid(6);
         let updateUser=await User.findOneAndUpdate({_id:parentId},{$set:{inviteCode:randomId}},{new:true})
@@ -143,7 +156,7 @@ function makeid(length) {
     let id=req.params.id
     try{
    let list=await inviteSchema.find({'sourceId':id})
-   console.log(list);
+   console.log(list,"listtt");
    res.send(list)
     }catch(err){
         console.log(err);

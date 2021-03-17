@@ -6,7 +6,10 @@ const roles=["Admin","Manager","Employee"]
 
 const signUp=(req,res,next)=>{
     // user
-    console.log(req.body,"cool");
+    console.log(req.body,"cool",roles.includes(req.body.role));
+    if(!roles.includes(req.body.role)){
+        return res.json({message:"Please Select valid Role"})
+    }
     bcrypt.hash(req.body.password,10,async function(err,hashedPass){
              if(err){
                  res.json({error:err})
@@ -29,9 +32,8 @@ const signUp=(req,res,next)=>{
                  res.send({err,status:"Email Already Exist"})
              }
     })
-        
 }
-
+        
 const LogIn=async(req,res,next)=>{
     console.log(req.body,"coooooooooooool");
     // const form = formidable({ multiples: true });
