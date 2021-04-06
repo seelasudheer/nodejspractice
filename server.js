@@ -11,6 +11,7 @@ const cors= require('cors');
 const userRouter = require('./Routes/userRouter');
 const dataRouter = require('./Routes/dataRouter');
 const utilRouter = require('./Routes/getInfo');
+const todoRouter = require('./Routes/todoRouter');
 const mongoose = require('mongoose')
 
 
@@ -37,7 +38,8 @@ db.once('connected', () => {
 // app.use(bodyParser.raw({ inflate: true, limit: '10000kb', type: 'image/png' }))
 
 
-app.use('/record',dataRouter)
+app.use('/record',upload.none(),dataRouter)
+app.use('/todo',upload.none(),todoRouter)
 app.use('/api',upload.none(),utilRouter)
 app.use('/',upload.none(),userRouter)
 

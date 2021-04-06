@@ -22,7 +22,7 @@ const addRecord=async(req,res,next)=>{
     }catch(err){
           console.log(err);
     }
-    console.log("req.body---------------ggggggg",req);
+    console.log("req.body---------------ggggggg",req.file);
     if(!req.file){
         console.log("No fiLE",req.file);
         res.statusCode =400
@@ -35,40 +35,41 @@ const addRecord=async(req,res,next)=>{
              contentType:req.file.mimetype,
              imageBase64:base64
          }
-    }
-      let record=new Record({
-        name:req.body.name,
-        age:req.body.age,
-        gender:req.body.gender,
-        address:req.body.address,
-        phonenumber:req.body.phonenumber,
-        email:req.body.email,
-        userid:req.body.userid,
-        image:fileType
-      })
-      try{
-     let data=await User.find({email:req.body.email})
-        console.log(data,"coooo9999999900000000000");
-        if(data.length==0){
-      await record.save()
-      .then(resp=>{
-          res.send(resp)
-      }).catch(err=>{
-          console.log("fer",err);
-          if(err){
-              console.log("no way");
-        res.json({error:err})
-          }
-        else{
-            res.send(err)
+         let record=new Record({
+            name:req.body.name,
+            age:req.body.age,
+            gender:req.body.gender,
+            address:req.body.address,
+            phonenumber:req.body.phonenumber,
+            email:req.body.email,
+            userid:req.body.userid,
+            image:fileType
+          })
+          try{
+         let data=await User.find({email:req.body.email})
+            console.log(data,"coooo9999999900000000000");
+            if(data.length==0){
+          await record.save()
+          .then(resp=>{
+              res.send(resp)
+          }).catch(err=>{
+              console.log("fer",err);
+              if(err){
+                  console.log("no way");
+            res.json({error:err})
+              }
+            else{
+                res.send(err)
+            }
+          }) 
+        }else{
+            res.send({message:"Email Already Exist"})
         }
-      }) 
-    }else{
-        res.send({message:"Email Already Exist"})
+        }catch(err){
+            console.log(err);
+        }
     }
-    }catch(err){
-        console.log(err);
-    }
+  
 }
 
 //show one Record 
